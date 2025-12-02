@@ -20,3 +20,13 @@ func AddToArray[V comparable, T ~[]V](arr *T, val V) bool {
 	*arr = append(*arr, val)
 	return true
 }
+
+// AllFunc returns whether all elements of the given slice satisfy the given predicate. If the given slice is nil or empty, it will return true.
+func AllFunc[Slice ~[]E, E any](ts Slice, pred func(E) bool) bool {
+	for _, t := range ts {
+		if !pred(t) {
+			return false
+		}
+	}
+	return true
+}
