@@ -30,3 +30,14 @@ func AllFunc[Slice ~[]E, E any](ts Slice, pred func(E) bool) bool {
 	}
 	return true
 }
+
+// Map takes a slice of values and transforms it into a slice of another type through a
+// given transformation function.
+func Map[Slice ~[]E, E any, Mapped []R, R any](s Slice, f func(e E) R) Mapped {
+	mapped := make(Mapped, len(s))
+	for idx, val := range s {
+		mapped[idx] = f(val)
+	}
+
+	return mapped
+}
