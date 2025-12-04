@@ -41,3 +41,14 @@ func Map[Slice ~[]E, E any, Mapped []R, R any](s Slice, f func(e E) R) Mapped {
 
 	return mapped
 }
+
+// CountFunc counts the number of elements in the given slice that satisfy the given predicate.
+func CountFunc[Slice ~[]E, E any](ts Slice, pred func(E) bool) int {
+	var count int
+	for _, t := range ts {
+		if pred(t) {
+			count++
+		}
+	}
+	return count
+}
