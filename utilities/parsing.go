@@ -2,13 +2,39 @@ package utilities
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"strconv"
+	"strings"
 
 	"parnic.com/aoc2025/inputs"
 )
+
+func downloadInput(filename string) error {
+	if len(filename) < 2 {
+		return fmt.Errorf("unexpected filename %s", filename)
+	}
+
+	dayStr := filename[:2]
+	day, err := strconv.ParseUint(dayStr, 10, 32)
+	if err != nil {
+		return fmt.Errorf("failed to parse filename %s as day: %w", filename, err)
+	}
+
+	input, err := downloadAOCURL(fmt.Sprintf("https://adventofcode.com/2025/day/%d/input", day))
+	if err != nil {
+		return fmt.Errorf("download AOC URL: %w", err)
+	}
+
+	err = os.WriteFile(fmt.Sprintf("inputs/%s.txt", filename), []byte(strings.TrimSpace(string(input))), 0664)
+	if err != nil {
+		return fmt.Errorf("write inputs/%s.txt: %w", filename, err)
+	}
+
+	return nil
+}
 
 func getData(filename string, lineHandler func(line string)) {
 	var err error
@@ -22,8 +48,17 @@ func getData(filename string, lineHandler func(line string)) {
 		file = os.Stdin
 	} else {
 		file, err = inputs.Sets.Open(fmt.Sprintf("%s.txt", filename))
-		// version that doesn't use embedded files:
-		// file, err := os.Open(fmt.Sprintf("inputs/%s.txt", filename))
+		if errors.Is(err, os.ErrNotExist) {
+			fmt.Printf("input %s not found, attempting to download...\n", filename)
+
+			err = downloadInput(filename)
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Println("successfully downloaded input", filename)
+			file, err = os.Open(fmt.Sprintf("inputs/%s.txt", filename))
+		}
 
 		if err != nil {
 			panic(err)

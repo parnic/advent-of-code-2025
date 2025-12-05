@@ -4,3 +4,4 @@ aoc2025
 debug.test
 *.*prof
 inputs/*.txt
+.session

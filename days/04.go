@@ -46,7 +46,7 @@ func (d *Day04) Part1() string {
 			}
 		}
 	}
-	return fmt.Sprintf("%s%d%s", u.TextBold, accessible, u.TextReset)
+	return fmt.Sprintf("Accessible rolls: %s%d%s", u.TextBold, accessible, u.TextReset)
 }
 
 func (d *Day04) cloneGrid(grid [][]bool) [][]bool {
@@ -84,5 +84,5 @@ func (d *Day04) Part2() string {
 		}
 	}
 
-	return fmt.Sprintf("%s%d%s", u.TextBold, removed, u.TextReset)
+	return fmt.Sprintf("Removable rolls: %s%d%s", u.TextBold, removed, u.TextReset)
 }
