@@ -28,7 +28,7 @@ func downloadInput(filename string) error {
 		return fmt.Errorf("download AOC URL: %w", err)
 	}
 
-	err = os.WriteFile(fmt.Sprintf("inputs/%s.txt", filename), []byte(strings.TrimSpace(string(input))), 0664)
+	err = os.WriteFile(fmt.Sprintf("inputs/%s.txt", filename), []byte(strings.TrimSuffix(string(input), "\n")), 0664)
 	if err != nil {
 		return fmt.Errorf("write inputs/%s.txt: %w", filename, err)
 	}
@@ -36,7 +36,7 @@ func downloadInput(filename string) error {
 	return nil
 }
 
-func getData(filename string, lineHandler func(line string)) {
+func getData(filename string, lineHandler func(line string)) string {
 	var err error
 	stdinStat, err := os.Stdin.Stat()
 	if err != nil {
@@ -67,11 +67,21 @@ func getData(filename string, lineHandler func(line string)) {
 
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
-	scanner.Split(bufio.ScanLines)
-	for scanner.Scan() {
-		lineHandler(scanner.Text())
+	if lineHandler != nil {
+		scanner := bufio.NewScanner(file)
+		scanner.Split(bufio.ScanLines)
+		for scanner.Scan() {
+			lineHandler(scanner.Text())
+		}
+
+		return ""
 	}
+
+	contents, err := io.ReadAll(file)
+	if err != nil {
+		panic(err)
+	}
+	return string(contents)
 }
 
 func GetStringContents(filename string) string {
@@ -83,6 +93,11 @@ func GetStringContents(filename string) string {
 		retval = line
 	})
 	return retval
+}
+
+func GetString(filename string) string {
+	data := getData(filename, nil)
+	return data
 }
 
 func GetStringLines(filename string) []string {

@@ -11,9 +11,10 @@ func GCD[T Integer](a, b T) T {
 
 func LCM[T Integer](nums ...T) uint64 {
 	num := len(nums)
-	if num == 0 {
+	switch num {
+	case 0:
 		return 0
-	} else if num == 1 {
+	case 1:
 		return uint64(nums[0])
 	}
 
