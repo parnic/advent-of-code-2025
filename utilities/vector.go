@@ -1,6 +1,11 @@
 package utilities
 
-import "math"
+import (
+	"fmt"
+	"math"
+	"strconv"
+	"strings"
+)
 
 type Vec2[T Number] struct {
 	X T
@@ -98,8 +103,33 @@ func VecBetween[T Number](a, b Vec2[T]) Vec2[T] {
 	return a.To(b)
 }
 
-func ManhattanDistance[T Number](a, b Vec2[T]) T {
-	return a.ManhattanDistance(b)
+func ParseVec3[T Number](str string) (Vec3[T], error) {
+	split := strings.Split(str, ",")
+	if len(split) != 3 {
+		return Vec3[T]{}, fmt.Errorf("expected 3 comma-separated parts")
+	}
+
+	v := Vec3[T]{}
+
+	x, err := strconv.ParseInt(strings.TrimSpace(split[0]), 10, 64)
+	if err != nil {
+		return Vec3[T]{}, fmt.Errorf("parse x component: %w", err)
+	}
+	v.X = T(x)
+
+	y, err := strconv.ParseInt(strings.TrimSpace(split[1]), 10, 64)
+	if err != nil {
+		return Vec3[T]{}, fmt.Errorf("parse y component: %w", err)
+	}
+	v.Y = T(y)
+
+	z, err := strconv.ParseInt(strings.TrimSpace(split[2]), 10, 64)
+	if err != nil {
+		return Vec3[T]{}, fmt.Errorf("parse z component: %w", err)
+	}
+	v.Z = T(z)
+
+	return v, nil
 }
 
 func (v Vec3[T]) Dot(other Vec3[T]) T {
@@ -124,4 +154,12 @@ func (v Vec3[T]) Equals(other Vec3[T]) bool {
 	return v.X == other.X &&
 		v.Y == other.Y &&
 		v.Z == other.Z
+}
+
+func (v Vec3[T]) ManhattanDistance(other Vec3[T]) T {
+	return T(math.Abs(float64(v.X-other.X)) + math.Abs(float64(v.Y-other.Y)) + math.Abs(float64(v.Z-other.Z)))
+}
+
+func (v Vec3[T]) DistanceSquared(other Vec3[T]) T {
+	return T(math.Pow(float64(v.X-other.X), 2) + math.Pow(float64(v.Y-other.Y), 2) + math.Pow(float64(v.Z-other.Z), 2))
 }

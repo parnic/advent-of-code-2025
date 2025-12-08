@@ -75,7 +75,7 @@ func (d *Day07) Part1() string {
 			movingBeams[beam] = struct{}{}
 		}
 	}
-	return fmt.Sprintf("%s%d%s", u.TextBold, numSplits, u.TextReset)
+	return fmt.Sprintf("Beam will split %s%d%s times", u.TextBold, numSplits, u.TextReset)
 }
 
 func (d *Day07) memoizeGetTimelines(memo map[u.Vec2i]uint64, p u.Vec2i) uint64 {
@@ -105,5 +105,5 @@ func (d *Day07) memoizeGetTimelines(memo map[u.Vec2i]uint64, p u.Vec2i) uint64 {
 func (d *Day07) Part2() string {
 	memo := make(map[u.Vec2i]uint64)
 	timelines := d.memoizeGetTimelines(memo, d.start)
-	return fmt.Sprintf("%s%d%s", u.TextBold, timelines, u.TextReset)
+	return fmt.Sprintf("Timelines for 1 particle: %s%d%s", u.TextBold, timelines, u.TextReset)
 }
