@@ -26,6 +26,8 @@ var (
 	Right     = Vec2i{X: 1, Y: 0}
 	Up        = Vec2i{X: 0, Y: -1}
 	Down      = Vec2i{X: 0, Y: 1}
+	IVec2Zero = Vec2[int]{X: 0, Y: 0}
+	IVec2One  = Vec2[int]{X: 1, Y: 1}
 	FourWay   = []Vec2i{Right, Left, Up, Down}
 	EightWay  = []Vec2i{Up, Up.AddVec(Right), Right, Right.AddVec(Down), Down, Down.AddVec(Left), Left, Left.AddVec(Up)}
 	Diagonals = []Vec2i{Up.AddVec(Right), Down.AddVec(Right), Up.AddVec(Left), Down.AddVec(Left)}
@@ -50,8 +52,30 @@ func (v Vec2[T]) To(other Vec2[T]) Vec2[T] {
 	}
 }
 
+func (v Vec2[T]) Sign() Vec2[int] {
+	x := 1
+	y := 1
+	if v.X < 0 {
+		x = -1
+	}
+	if v.Y < 0 {
+		y = -1
+	}
+	return Vec2[int]{
+		X: x,
+		Y: y,
+	}
+}
+
 func (v Vec2i) AddVec(other Vec2i) Vec2i {
 	return Vec2i{
+		X: v.X + other.X,
+		Y: v.Y + other.Y,
+	}
+}
+
+func (v Vec2[T]) AddVec(other Vec2[T]) Vec2[T] {
+	return Vec2[T]{
 		X: v.X + other.X,
 		Y: v.Y + other.Y,
 	}
@@ -101,6 +125,29 @@ func (v Vec2i) GetBoundedOrthogonalNeighbors(min Vec2i, max Vec2i) []Vec2i {
 
 func VecBetween[T Number](a, b Vec2[T]) Vec2[T] {
 	return a.To(b)
+}
+
+func ParseVec2[T Number](str string) (Vec2[T], error) {
+	split := strings.Split(str, ",")
+	if len(split) != 2 {
+		return Vec2[T]{}, fmt.Errorf("expected 2 comma-separated parts")
+	}
+
+	v := Vec2[T]{}
+
+	x, err := strconv.ParseInt(strings.TrimSpace(split[0]), 10, 64)
+	if err != nil {
+		return Vec2[T]{}, fmt.Errorf("parse x component: %w", err)
+	}
+	v.X = T(x)
+
+	y, err := strconv.ParseInt(strings.TrimSpace(split[1]), 10, 64)
+	if err != nil {
+		return Vec2[T]{}, fmt.Errorf("parse y component: %w", err)
+	}
+	v.Y = T(y)
+
+	return v, nil
 }
 
 func ParseVec3[T Number](str string) (Vec3[T], error) {

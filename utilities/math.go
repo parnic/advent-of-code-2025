@@ -48,3 +48,13 @@ func Min[T Number](nums ...T) T {
 
 	return least
 }
+
+func Sign[T Number](num T) int {
+	if num == 0 {
+		return 0
+	} else if num > 0 {
+		return 1
+	}
+
+	return -1
+}
