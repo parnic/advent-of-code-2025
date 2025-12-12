@@ -1,6 +1,6 @@
 package utilities
 
-import "math"
+import "cmp"
 
 func GCD[T Integer](a, b T) T {
 	if b == 0 {
@@ -29,26 +29,6 @@ func lcm[T Integer](a, b T) uint64 {
 	return uint64(a*b) / uint64(GCD(a, b))
 }
 
-func Min[T Number](nums ...T) T {
-	numNums := len(nums)
-	if numNums == 2 {
-		return T(math.Min(float64(nums[0]), float64(nums[1])))
-	}
-
-	if numNums == 0 {
-		return 0
-	}
-
-	least := nums[0]
-	for i := 1; i < numNums; i++ {
-		if nums[i] < least {
-			least = nums[i]
-		}
-	}
-
-	return least
-}
-
 func Sign[T Number](num T) int {
 	if num == 0 {
 		return 0
@@ -57,4 +37,17 @@ func Sign[T Number](num T) int {
 	}
 
 	return -1
+}
+
+func Factorial[T Integer](n T) uint64 {
+	if Sign(n) < 1 {
+		return 0
+	}
+	r := uint64(1)
+	i := uint64(2)
+	for cmp.Compare(i, uint64(n)) < 1 {
+		r *= i
+		i += 1
+	}
+	return r
 }

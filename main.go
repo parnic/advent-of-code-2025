@@ -74,16 +74,18 @@ func main() {
 		}
 		fmt.Printf("%sAll days completed in %v%s\n", utilities.ColorBrightBlack, time.Since(startTime), utilities.TextReset)
 	} else {
-		iArg, err := strconv.Atoi(arg)
-		if err != nil {
-			log.Fatalf("Invalid day %s%s%s", utilities.ColorCyan, arg, utilities.TextReset)
-		}
+		for _, arg := range flag.Args() {
+			iArg, err := strconv.Atoi(arg)
+			if err != nil {
+				log.Fatalf("Invalid day %s%s%s", utilities.ColorCyan, arg, utilities.TextReset)
+			}
 
-		if iArg < 0 || iArg > len(dayMap) {
-			log.Fatalf("Unknown day %s%s%s", utilities.ColorCyan, arg, utilities.TextReset)
-		}
+			if iArg < 0 || iArg > len(dayMap) {
+				log.Fatalf("Unknown day %s%s%s", utilities.ColorCyan, arg, utilities.TextReset)
+			}
 
-		solve(dayMap[iArg-1])
+			solve(dayMap[iArg-1])
+		}
 	}
 
 	if *flagMemProfile != "" {

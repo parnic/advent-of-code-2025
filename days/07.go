@@ -3,6 +3,7 @@ package days
 import (
 	"fmt"
 	"maps"
+	"slices"
 
 	u "parnic.com/aoc2025/utilities"
 )
@@ -57,7 +58,7 @@ func (d *Day07) Part1() string {
 
 			processing = true
 
-			if u.ArrayContains(d.splitters, beam) {
+			if slices.Contains(d.splitters, beam) {
 				numSplits++
 				left := beam.AddVec(u.Left)
 				right := beam.AddVec(u.Right)
@@ -87,7 +88,7 @@ func (d *Day07) memoizeGetTimelines(memo map[u.Vec2i]uint64, p u.Vec2i) uint64 {
 	}
 
 	var timelines uint64
-	if u.ArrayContains(d.splitters, p) {
+	if slices.Contains(d.splitters, p) {
 		if p.X > 0 {
 			timelines = d.memoizeGetTimelines(memo, p.AddVec(u.Left))
 		}

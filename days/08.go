@@ -36,10 +36,10 @@ func (d Day08) Num() int {
 
 func (d *Day08) ConnectBoxes(circuits [][]u.Vec3[int], a u.Vec3[int], b u.Vec3[int]) [][]u.Vec3[int] {
 	ai := slices.IndexFunc(circuits, func(list []u.Vec3[int]) bool {
-		return u.ArrayContains(list, a)
+		return slices.Contains(list, a)
 	})
 	bi := slices.IndexFunc(circuits, func(list []u.Vec3[int]) bool {
-		return u.ArrayContains(list, b)
+		return slices.Contains(list, b)
 	})
 	// neither is connected to anything
 	if ai < 0 && bi < 0 {

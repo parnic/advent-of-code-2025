@@ -4,31 +4,12 @@ import (
 	"cmp"
 )
 
-func Factorial[T Number](n T) T {
-	if Sign(n) < 1 {
-		return T(0)
-	}
-	r := T(1)
-	i := T(2)
-	for cmp.Compare(i, n) < 1 {
-		r *= i
-		i += T(1)
-	}
-	return r
-}
-
-func NumPermutations[T Number](n, k T) T {
-	r := Factorial(n)
-	r /= Factorial(n - k)
-	return r
-}
-
-func NumCombinations[T Number](n, r T) T {
+func NumCombinations[T Integer](n, r T) uint64 {
 	if cmp.Compare(r, n) == 1 {
-		return T(0)
+		return 0
 	}
 	if cmp.Compare(r, n) == 0 {
-		return T(1)
+		return 1
 	}
 	c := Factorial(n)
 	den := Factorial(n - r)
