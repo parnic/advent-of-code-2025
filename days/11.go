@@ -35,9 +35,7 @@ func (d *Day11) numExits(start string, stop string, memo map[string]int64) int64
 
 	var exits int64
 	for _, candidate := range d.paths[start] {
-		if candidateExits := d.numExits(candidate, stop, memo); candidateExits > 0 {
-			exits += candidateExits
-		}
+		exits += d.numExits(candidate, stop, memo)
 	}
 
 	memo[start] = exits
